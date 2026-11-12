@@ -19,7 +19,7 @@ const media = new ChartMedia();
 media.src = SONG_URL;
 
 function App() {
-  const { song, part } = useChart(media);
+  const { song, part, run } = useChart(media);
 
   return (
     // No skin: the game draws its own UI, and owns the keyboard.
@@ -31,8 +31,8 @@ function App() {
             {song && part && (
               <>
                 <SongTracks song={song} part={part} />
-                {/* A new part starts a new game. */}
-                <Game key={part.id} clock={media} />
+                {/* A new part, or playing the song again from the start, starts a new game. */}
+                <Game key={`${part.id}:${run}`} clock={media} />
                 <TitleCard song={song} />
               </>
             )}
@@ -59,19 +59,30 @@ function Game({ clock }: { clock: ChartMedia }) {
   );
 }
 
-/** The song once it loads, and the part being played, which the quality menu picks. */
+/**
+ * The song once it loads, the part being played, which the quality menu picks, and a count of runs, which goes up each
+ * time the song plays from the start.
+ */
 function useChart(media: ChartMedia) {
   const [chart, setChart] = useState({ song: media.song, part: media.part });
+  const [run, setRun] = useState(0);
 
   useEffect(() => {
     const update = () => setChart({ song: media.song, part: media.part });
+    const restart = () => {
+      if (media.currentTime === 0) setRun((run) => run + 1);
+    };
 
     media.addEventListener('partchange', update);
+    media.addEventListener('play', restart);
 
-    return () => media.removeEventListener('partchange', update);
+    return () => {
+      media.removeEventListener('partchange', update);
+      media.removeEventListener('play', restart);
+    };
   }, [media]);
 
-  return chart;
+  return { ...chart, run };
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
