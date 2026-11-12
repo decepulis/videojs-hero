@@ -8,7 +8,7 @@ import { createRoot } from 'react-dom/client';
 import { ChartMedia } from './chart-media';
 import { ChartMediaView } from './chart-media-view';
 import { ControlBar } from './controls';
-import { Banner, GamepadToast, Hud, Lanes, Lyrics, Results, TitleCard } from './overlays';
+import { Banner, GamepadToast, Hud, Lanes, Lyrics, LyricsOn, Results, TitleCard } from './overlays';
 import { PadsDebug } from './pads-debug';
 import { SONG_URL } from './song';
 import { SongTracks } from './song-tracks';
@@ -40,6 +40,7 @@ function App() {
             {song && part && (
               <>
                 <SongTracks song={song} part={part} />
+                <LyricsOn />
                 {/* A new part, or playing the song again from the start, starts a new game. */}
                 <Game key={`${part.id}:${run}`} clock={media} />
                 <TitleCard song={song} />

@@ -31,7 +31,7 @@ Other scripts: `pnpm build`, `pnpm preview`, `pnpm typecheck`.
 - Keys **1** to **5** strum the five lanes, green to orange. You can also tap the lanes at the strike line, or play a
   [guitar controller](#guitar-controllers).
 - The part menu (bottom right) picks the instrument and difficulty.
-- **Lyrics on/off** toggles the lyrics, which light up syllable by syllable.
+- Lyrics are on by default and light up syllable by syllable; toggle them with the **Lyrics** button.
 
 ## Guitar controllers
 

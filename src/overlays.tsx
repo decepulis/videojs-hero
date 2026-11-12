@@ -1,4 +1,4 @@
-import { PlayButton, useActiveTextCues, useTextCues } from '@videojs/react';
+import { PlayButton, useActiveTextCues, useTextCues, useTextTracks } from '@videojs/react';
 import { usePlayer } from '@videojs/react/video';
 import { useEffect, useState } from 'react';
 
@@ -97,6 +97,18 @@ export function Lyrics() {
       )) ?? line.text}
     </p>
   );
+}
+
+/** Turn the lyrics on once their track is added. After that they're the Lyrics button's, even across part switches. */
+export function LyricsOn(): null {
+  const store = usePlayer();
+  const id = useTextTracks(lyricsTrack)[0]?.id;
+
+  useEffect(() => {
+    if (id) store.selectSubtitlesTrack(id);
+  }, [store, id]);
+
+  return null;
 }
 
 /** A note, for a few seconds, that a guitar was plugged in, or that a controller needs mapping. */
