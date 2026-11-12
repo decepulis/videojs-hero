@@ -137,6 +137,11 @@ button {
   pointer-events: none;
 }
 
+.toast a {
+  color: inherit;
+  pointer-events: auto;
+}
+
 /* Five tap zones from just above the strike line to the bottom edge, centered on the canvas's lanes. */
 .lanes {
   position: absolute;

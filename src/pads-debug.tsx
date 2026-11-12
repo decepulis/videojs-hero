@@ -24,8 +24,14 @@ export function PadsDebug() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  return <pre className="pads">{text || 'No gamepads yet. Press a button on one.'}</pre>;
+  return <pre className="pads">{`${HELP}\n\n${text || 'No gamepads yet. Press a button on one.'}`}</pre>;
 }
+
+const HELP = [
+  'Guitars with the standard layout (XInput, Santroller, CRKD Nitro) play as is.',
+  'For another controller: press each fret, then strum up and down, and note the button numbers.',
+  'The mapping is GUITAR_BUTTONS in src/use-guitar.ts; send the numbers along and we will add it.',
+].join('\n');
 
 function describe(pad: Gamepad): string {
   const buttons = pad.buttons.flatMap((button, index) => (button.pressed ? [index] : []));

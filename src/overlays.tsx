@@ -127,7 +127,13 @@ export function GamepadToast() {
   return (
     pad && (
       <p key={pad.at} className="toast" role="status">
-        {pad.standard ? 'Guitar connected' : 'Controller connected: open ?pads to map it'}
+        {pad.standard ? (
+          'Guitar connected'
+        ) : (
+          <>
+            Unknown controller: <a href="?pads">see its buttons</a>
+          </>
+        )}
       </p>
     )
   );
