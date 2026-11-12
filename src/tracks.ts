@@ -27,11 +27,11 @@ export const toNoteCues: TextCueFormat<Note> = (text) =>
     value: note,
   }));
 
-// A sustain is a cue that spans the tail of a held note.
+// A sustain is a cue that spans the tail of a held note. It ends a hit window early, so letting go on the beat counts.
 export const toSustainCues: TextCueFormat<Note> = (text) =>
   parseNotes(text)
     .filter((note) => note.length > 0)
-    .map((note) => ({ startTime: note.time, endTime: note.time + note.length, value: note }));
+    .map((note) => ({ startTime: note.time, endTime: note.time + note.length - HIT_WINDOW, value: note }));
 
 function parseNotes(text: string): Note[] {
   return JSON.parse(text);
