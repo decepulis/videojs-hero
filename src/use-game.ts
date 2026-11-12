@@ -24,11 +24,14 @@ export function useGame(clock: { readonly currentTime: number }) {
       (note) => note.value?.lane === lane && !state.hits.has(note) && note.startTime <= time && time < note.endTime
     );
 
-    held.current.add(lane);
-
     // A strum with no note to hit breaks the combo.
-    if (!cue) return dispatch({ type: 'miss', lane, at: time });
+    if (!cue) {
+      dispatch({ type: 'miss', lane, at: time });
+      return;
+    }
 
+    // Only a hit note can be held.
+    held.current.add(lane);
     store.selectAudioTrack('hit');
     dispatch({ type: 'hit', cue, lane, starPower, at: time });
   }
@@ -39,17 +42,18 @@ export function useGame(clock: { readonly currentTime: number }) {
 
   useLaneKeys(press, release);
 
-  // A note whose hit window passes without a hit is a miss, and mutes the part.
+  // A note whose hit window passes without a hit is a miss: there's nothing to hold, and the part goes quiet.
   useCueEvents(notesTrack, {
     onExit(cue) {
       if (state.hits.has(cue) || !cue.value) return;
 
+      held.current.delete(cue.value.lane);
       store.selectAudioTrack('missed');
       dispatch({ type: 'miss', lane: cue.value.lane, at: cue.endTime });
     },
   });
 
-  // Holding a note to the end of its sustain earns a bonus.
+  // Holding a hit note to the end of its sustain earns a bonus.
   useCueEvents(sustainsTrack, {
     onExit(cue) {
       if (cue.value && held.current.has(cue.value.lane)) dispatch({ type: 'sustain', length: cue.value.length });
