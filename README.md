@@ -20,7 +20,7 @@ Behind a proxy, Node's `fetch` needs to be told about it:
 NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/path/to/ca.crt pnpm song
 ```
 
-(`NODE_EXTRA_CA_CERTS` is only needed when the proxy intercepts TLS.) The download is kept as `public/song/chart.sng`, so
+(`NODE_EXTRA_CA_CERTS` is only needed when the proxy intercepts TLS.) The download is kept as `.cache/chart.sng`, so
 later runs skip it.
 
 Other scripts: `pnpm build`, `pnpm preview`, `pnpm typecheck`.

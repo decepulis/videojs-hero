@@ -1,5 +1,7 @@
 node_modules
 dist
+# The chart download `pnpm song` keeps so later runs skip it.
+.cache
 .DS_Store
 
 # Song data written by `pnpm song`. The chart has no license to redistribute.

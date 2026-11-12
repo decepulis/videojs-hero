@@ -10,8 +10,8 @@
  * - `sections.json`, `lyrics.json`, `star-power/*.json`, `solos/*.json`: text cues the player loads as they are.
  * - The audio stems and album art, unchanged.
  *
- * The output is gitignored because the chart has no license to redistribute. The download is kept as `chart.sng`, so
- * later runs skip it. Run it with `pnpm song`.
+ * The output is gitignored because the chart has no license to redistribute. The download is kept as
+ * `../.cache/chart.sng`, outside what the site serves, so later runs skip it. Run it with `pnpm song`.
  *
  * Behind a proxy, add `NODE_USE_ENV_PROXY=1`, and `NODE_EXTRA_CA_CERTS=<ca.crt>` when it intercepts TLS.
  *
@@ -27,6 +27,7 @@ import type { Difficulty, Instrument, Lane, Note, Part, Song } from '../src/song
 const SONG_URL = 'https://files.enchor.us/ea04c558c53df070f9abc41b53669397.sng';
 const AUDIO_LICENSE = 'CC BY-SA 3.0';
 const OUT_DIR = join(import.meta.dirname, '../public/song');
+const CACHE_FILE = join(import.meta.dirname, '../.cache/chart.sng');
 
 /** Each instrument's MIDI track, and the stems a miss could mute, in order of preference. */
 const INSTRUMENTS: { instrument: Instrument; trackName: string; stems: string[] }[] = [
@@ -436,6 +437,7 @@ async function download(url: string, path: string): Promise<Buffer> {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Download failed: ${response.status} ${response.statusText}`);
 
+    await mkdir(dirname(path), { recursive: true });
     await writeFile(path, Buffer.from(await response.arrayBuffer()));
   }
 
@@ -479,7 +481,7 @@ function capitalize(word: string): string {
 
 await mkdir(OUT_DIR, { recursive: true });
 
-const sng = unpackSng(await download(SONG_URL, join(OUT_DIR, 'chart.sng')));
+const sng = unpackSng(await download(SONG_URL, CACHE_FILE));
 const notesMid = sng.files.get('notes.mid');
 if (!notesMid) throw new Error('The chart has no notes.mid');
 
