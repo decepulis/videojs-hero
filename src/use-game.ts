@@ -6,9 +6,10 @@ import { accuracy, INITIAL_SCORE, multiplier, scoreReducer } from './score';
 import type { Lane } from './song';
 import { notesTrack, solosTrack, starPowerTrack, sustainsTrack } from './tracks';
 import { useCueEvents } from './use-cue-events';
+import { useGuitar } from './use-guitar';
 import { useLaneKeys } from './use-lane-keys';
 
-/** Play along: strum a lane as its note's cue passes the strike line, with keys 1 to 5 or the tap zones. */
+/** Play along: strum a lane as its note's cue passes the strike line, with keys 1 to 5, the tap zones, or a guitar. */
 export function useGame(clock: { readonly currentTime: number }) {
   const store = usePlayer();
   const notes = useTextCues(notesTrack);
@@ -41,6 +42,7 @@ export function useGame(clock: { readonly currentTime: number }) {
   }
 
   useLaneKeys(press, release);
+  useGuitar(press, release);
 
   // A note whose hit window passes without a hit is a miss: there's nothing to hold, and the part goes quiet.
   useCueEvents(notesTrack, {

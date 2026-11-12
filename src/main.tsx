@@ -8,7 +8,8 @@ import { createRoot } from 'react-dom/client';
 import { ChartMedia } from './chart-media';
 import { ChartMediaView } from './chart-media-view';
 import { ControlBar } from './controls';
-import { Banner, Hud, Lanes, Lyrics, Results, TitleCard } from './overlays';
+import { Banner, GamepadToast, Hud, Lanes, Lyrics, Results, TitleCard } from './overlays';
+import { PadsDebug } from './pads-debug';
 import { SONG_URL } from './song';
 import { SongTracks } from './song-tracks';
 import { useGame } from './use-game';
@@ -17,6 +18,9 @@ import { useGame } from './use-game';
 const media = new ChartMedia();
 
 media.src = SONG_URL;
+
+// `?pads` in the URL lists what each connected gamepad's buttons are doing, to map a new guitar.
+const SHOW_PADS = new URLSearchParams(location.search).has('pads');
 
 // A hidden tab stops drawing frames but not the audio, so the song pauses with it.
 document.addEventListener('visibilitychange', () => {
@@ -41,10 +45,12 @@ function App() {
                 <TitleCard song={song} />
               </>
             )}
+            <GamepadToast />
           </div>
           {song && <ControlBar song={song} />}
         </Container>
         {song && <p className="credits">{song.credits}</p>}
+        {SHOW_PADS && <PadsDebug />}
       </main>
     </VideoPlayer>
   );

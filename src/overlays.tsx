@@ -1,5 +1,6 @@
 import { PlayButton, useActiveTextCues, useTextCues } from '@videojs/react';
 import { usePlayer } from '@videojs/react/video';
+import { useEffect, useState } from 'react';
 
 import { accuracy } from './score';
 import { type Lane, type Song, songFile } from './song';
@@ -95,6 +96,27 @@ export function Lyrics() {
         </span>
       )) ?? line.text}
     </p>
+  );
+}
+
+/** A note, for a few seconds, that a guitar was plugged in, or that a controller needs mapping. */
+export function GamepadToast() {
+  const [pad, setPad] = useState<{ standard: boolean; at: number }>();
+
+  useEffect(() => {
+    const connected = (event: GamepadEvent) =>
+      setPad({ standard: event.gamepad.mapping === 'standard', at: event.timeStamp });
+
+    window.addEventListener('gamepadconnected', connected);
+    return () => window.removeEventListener('gamepadconnected', connected);
+  }, []);
+
+  return (
+    pad && (
+      <p key={pad.at} className="toast" role="status">
+        {pad.standard ? 'Guitar connected' : 'Controller connected: open ?pads to map it'}
+      </p>
+    )
   );
 }
 

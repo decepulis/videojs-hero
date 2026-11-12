@@ -28,9 +28,25 @@ Other scripts: `pnpm build`, `pnpm preview`, `pnpm typecheck`.
 
 ## Controls
 
-- Keys **1** to **5** strum the five lanes, green to orange. You can also tap the lanes at the strike line.
+- Keys **1** to **5** strum the five lanes, green to orange. You can also tap the lanes at the strike line, or play a
+  [guitar controller](#guitar-controllers).
 - The part menu (bottom right) picks the instrument and difficulty.
 - **Lyrics on/off** toggles the lyrics, which light up syllable by syllable.
+
+## Guitar controllers
+
+A Guitar Hero guitar works through the browser's Gamepad API (`src/use-guitar.ts`). Like the real game, holding frets
+does nothing until you strum: a strum, up or down, plays every fret held, so chords work, and letting go of a fret ends
+its sustain. A strum with no fret held is ignored rather than counted as an overstrum. Press a button on the guitar
+after the page loads, and a "Guitar connected" note shows.
+
+- The fret and strum mapping is the `GUITAR_BUTTONS` table at the top of `src/use-guitar.ts`. It fits guitars the
+  browser reports with the `standard` mapping: Xbox 360 (XInput) guitars, Santroller, and the CRKD Nitro in XInput
+  mode.
+- PS3, Wii, and other HID guitars report their own layouts, so they need a table of their own (and the `standard` check
+  in `useGuitar` loosened). Open the page with `?pads` (for example `http://localhost:5173/?pads`) to see each connected
+  gamepad's id, mapping, held buttons, and pushed axes, then press each fret and the strum bar to read their numbers.
+- Browsers only offer gamepads to `https` pages and `localhost`.
 
 ## How it works
 
