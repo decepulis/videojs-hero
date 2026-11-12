@@ -17,12 +17,13 @@ export function TitleCard({ song }: { song: Song }) {
   return (
     <div className="title-card">
       {song.albumArt && <img src={songFile(song.albumArt)} alt="" />}
+      <p className="brand">Video.js Hero</p>
       <h1>{song.title}</h1>
       <p>
         {song.artist} · charted by {song.charter}
       </p>
       <PlayButton className="start" render={(props) => <button {...props}>Play</button>} />
-      <p className="hint">Strum with keys 1 to 5, or tap the lanes.</p>
+      <p className="hint">Strum with keys 1 to 5, tap the lanes, or plug in a guitar.</p>
     </div>
   );
 }

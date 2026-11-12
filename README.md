@@ -1,4 +1,6 @@
-# Video.js Guitar Hero
+# Video.js Hero
+
+Play it at [videojs-hero.vercel.app](https://videojs-hero.vercel.app).
 
 A tiny Guitar Hero inside a [Video.js](https://videojs.org) React player, built on its timed metadata APIs. It's the
 example app for a blog post about timed metadata: the game reads every note, sustain, Star Power phrase, solo, section,

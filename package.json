@@ -1,8 +1,8 @@
 {
-  "name": "videojs-guitar-hero",
+  "name": "videojs-hero",
   "version": "0.0.0",
   "private": true,
-  "description": "A tiny Guitar Hero in a Video.js player, built on timed metadata.",
+  "description": "Video.js Hero: a tiny Guitar Hero in a Video.js player, built on timed metadata.",
   "type": "module",
   "scripts": {
     "dev": "vite",

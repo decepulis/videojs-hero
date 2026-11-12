@@ -385,7 +385,7 @@ body {
 /* A gig poster taped up beside the bill: art on the left, the band on the right. */
 .title-card {
   display: grid;
-  grid-template-rows: repeat(4, auto);
+  grid-template-rows: repeat(5, auto);
   grid-template-columns: auto minmax(0, 52cqw);
   gap: 1.4cqh 6cqw;
   place-content: center;
@@ -447,7 +447,17 @@ body {
   filter: drop-shadow(0 0.5cqh 0 #000) drop-shadow(0 0 2.5cqh rgb(255 80 0 / 0.55));
 }
 
-.title-card > p:not(.hint) {
+/* The game's name, stamped in chrome above the song. */
+.title-card .brand {
+  font: 400 max(3.6cqh, 0.8rem) / 1 var(--font-metal);
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, #c9ced6 45%, #6b7280 55%, #e5e7eb 100%);
+  background-clip: text;
+  letter-spacing: 0.06em;
+  filter: drop-shadow(0 0.3cqh 0 #000);
+}
+
+.title-card > p:not(.hint, .brand) {
   font-size: max(2.5cqh, 0.6rem);
   font-weight: 500;
   color: var(--ink-dim);
