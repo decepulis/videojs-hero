@@ -1,8 +1,9 @@
 # Video.js Guitar Hero
 
 A tiny Guitar Hero inside a [Video.js](https://videojs.org) React player, built on its timed metadata APIs. It's the
-example app for a blog post about timed metadata: every note, sustain, Star Power phrase, solo, section, and lyric is a
-text track cue, and the game is mostly a few hooks that react to cues entering and leaving.
+example app for a blog post about timed metadata: the game reads every note, sustain, Star Power phrase, solo, section,
+and lyric as text track cues, and is mostly a few hooks that react to cues entering and leaving. (The highway itself is
+drawn from the media's own copy of the notes.)
 
 ![Star Power with lyrics on](docs/star-power.jpg)
 
@@ -41,15 +42,26 @@ Other scripts: `pnpm build`, `pnpm preview`, `pnpm typecheck`.
 - **Misses are an audio track.** A missed note selects the `missed` audio track, which mutes the part's stem until the
   next hit selects `hit` again.
 - **The chart is text tracks.** The interesting files:
-  - [`src/tracks.ts`](src/tracks.ts) defines a typed text track per part of the chart, and turns a notes file into cues
+  - [`src/tracks.ts`](src/tracks.ts) defines a typed text track per layer of the chart, and turns a notes file into cues
     that span each note's hit window and each sustain's tail.
   - [`src/song-tracks.ts`](src/song-tracks.ts) adds those tracks to the player, swapping in the notes, Star Power, and
     solos of whichever part is picked.
   - [`src/use-cue-events.ts`](src/use-cue-events.ts) turns a track's active cues into `onEnter` and `onExit` calls.
   - [`src/use-game.ts`](src/use-game.ts) is the game: a strum hits a note whose cue is active, a note cue that exits
-    unhit is a miss, holding through a sustain's cue earns a bonus, and solo cues show a banner.
+    unhit is a miss, holding a hit note through its sustain's cue earns a bonus, and solo cues show a banner.
 - `scripts/fetch-song.ts` downloads the Clone Hero chart, reads its MIDI, and writes the manifest, per-part notes, and
   cue files the page loads from `/song/`.
+
+**The chart format.** A Clone Hero song is a folder of audio stems plus a chart (`notes.mid` or `notes.chart`, here
+packed into one `.sng` file). The chart holds the notes for each instrument and difficulty, Star Power and solo phrases,
+the song's sections, and its lyrics. `pnpm song` turns those into plain cue lists. The
+[chart format docs](https://github.com/TheNathannator/GuitarGame_ChartFormats) have the details for the curious.
+
+**Timing.** The custom media fires `timeupdate` every animation frame, so cues turn active and inactive at most a frame
+late. A real `<video>` fires it about four times a second, which is fine for captions and chapters but too coarse to call
+a miss, so hits are judged against `currentTime` at the moment of the keypress.
+
+What we bumped into in Video.js along the way is in [`docs/findings.md`](docs/findings.md).
 
 ![Solo banner](docs/solo.jpg)
 
