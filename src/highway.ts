@@ -2,6 +2,7 @@ import { clamp } from '@videojs/utils/number';
 
 import type { ChartMedia } from './chart-media';
 import { BACKDROP, BOARD, CHROME, EMBERS, FOG, FRETS, GEM, LANES, STRIKE, TAIL, TARGET } from './highway-theme';
+import type { Note } from './song';
 
 /** Seconds of chart in view above the strike line. */
 const LOOK_AHEAD = 1.5;
@@ -59,7 +60,22 @@ export class Highway {
     this.#drawBoard(time);
     this.#drawTargets();
 
-    // Far notes first, so near ones overlap them.
+    // On drums, lane 0 is the kick pedal: a bar across the whole highway, drawn under every gem.
+    const isKick = (note: Note) => drums && note.lane === 0;
+
+    this.#drawNotes(notes.filter(isKick), time, (from) => this.#drawKick(from));
+    this.#drawNotes(
+      notes.filter((note) => !isKick(note)),
+      time,
+      (from, note) => this.#drawGem(note.lane, from)
+    );
+
+    this.#context.globalAlpha = 1;
+    this.#drawFog();
+  };
+
+  /** Draw notes far to near, so near ones overlap them, with their sustain tails. */
+  #drawNotes(notes: readonly Note[], time: number, drawHead: (from: number, note: Note) => void): void {
     for (let i = notes.length - 1; i >= 0; i--) {
       const note = notes[i]!;
       const from = note.time - time;
@@ -75,15 +91,9 @@ export class Highway {
       if (from < -FADE_OUT) continue;
 
       this.#context.globalAlpha = fade(from);
-
-      // On drums, lane 0 is the kick pedal: a bar across the whole highway.
-      if (drums && note.lane === 0) this.#drawKick(from);
-      else this.#drawGem(note.lane, from);
+      drawHead(from, note);
     }
-
-    this.#context.globalAlpha = 1;
-    this.#drawFog();
-  };
+  }
 
   #layout(): void {
     this.#width = this.#canvas.width;
