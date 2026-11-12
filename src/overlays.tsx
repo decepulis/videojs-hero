@@ -39,6 +39,8 @@ export function Hud({ game }: { game: Game }) {
 
 /** The five lanes at the strike line: tap zones that flash as notes are hit and missed. */
 export function Lanes({ game }: { game: Game }) {
+  const paused = usePlayer((state) => state.paused);
+
   return (
     <div className="lanes">
       {LANES.map((lane) => {
@@ -52,8 +54,12 @@ export function Lanes({ game }: { game: Game }) {
             className="lane"
             data-lane={lane}
             aria-label={`Lane ${lane + 1}`}
-            onPointerDown={() => game.press(lane)}
+            onPointerDown={(event) => {
+              // Strum with a finger, a pen, or the main mouse button, while the song plays.
+              if (event.button === 0 && !paused) game.press(lane);
+            }}
             onPointerUp={() => game.release(lane)}
+            onPointerCancel={() => game.release(lane)}
             onPointerLeave={() => game.release(lane)}
           >
             {flash && <span key={flash.at} className="flash" data-kind={flash.kind} />}

@@ -1,3 +1,4 @@
+import { usePlayer } from '@videojs/react/video';
 import { useEffect, useEffectEvent } from 'react';
 
 import type { Lane } from './song';
@@ -11,14 +12,16 @@ const LANE_KEYS = new Map<string, Lane>([
   ['Digit5', 4],
 ]);
 
-/** Call `press` and `release` as the lane keys go down and up. */
+/** Call `press` and `release` as the lane keys go down and up. Presses only count while the song plays. */
 export function useLaneKeys(press: (lane: Lane) => void, release: (lane: Lane) => void): void {
+  const paused = usePlayer((state) => state.paused);
+
   const onKey = useEffectEvent((event: KeyboardEvent) => {
     const lane = LANE_KEYS.get(event.code);
     if (lane === undefined || event.repeat) return;
 
-    if (event.type === 'keydown') press(lane);
-    else release(lane);
+    if (event.type === 'keyup') release(lane);
+    else if (!paused) press(lane);
   });
 
   // A key let go while the window is in the background never sends its keyup.
