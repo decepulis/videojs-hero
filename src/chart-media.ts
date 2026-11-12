@@ -356,12 +356,13 @@ export class ChartMedia extends MediaTracksMixin(EventTarget) {
     this.#offset = clamp(time, 0, this.duration || 0);
     this.#ended = false;
     this.#seeking = true;
-    this.#dispatch('seeking');
 
     if (playing) this.#startStems();
 
-    // The store starts waiting for `seeked` just after setting the time, so it can't fire until then.
-    queueMicrotask(() => {
+    // Cues move to the new time while the player still sees a seek, so it can tell jumped-over cues from played ones.
+    // `seeked` waits for a later task: the store waits for it only after setting the time, and React renders between.
+    this.#dispatch('seeking', 'timeupdate');
+    setTimeout(() => {
       this.#seeking = false;
       this.#dispatch('seeked', 'timeupdate');
     });
