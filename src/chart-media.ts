@@ -181,6 +181,8 @@ export class ChartMedia extends MediaTracksMixin(EventTarget) {
     const stems = await Promise.all(
       Object.entries(song.stems).map(async ([name, path]) => {
         const response = await fetch(this.#resolve(path), { signal });
+        if (!response.ok) throw new Error(`Failed to load ${response.url}: ${response.status}`);
+
         const buffer = await this.#audio.decodeAudioData(await response.arrayBuffer());
 
         return [name, buffer] as const;
