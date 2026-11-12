@@ -1,0 +1,72 @@
+# Video.js Guitar Hero
+
+A tiny Guitar Hero inside a [Video.js](https://videojs.org) React player, built on its timed metadata APIs. It's the
+example app for a blog post about timed metadata: every note, sustain, Star Power phrase, solo, section, and lyric is a
+text track cue, and the game is mostly a few hooks that react to cues entering and leaving.
+
+![Star Power with lyrics on](docs/star-power.jpg)
+
+## Quick start
+
+```bash
+pnpm install
+pnpm song   # download the chart and audio into public/song/
+pnpm dev
+```
+
+Behind a proxy, Node's `fetch` needs to be told about it:
+
+```bash
+NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/path/to/ca.crt pnpm song
+```
+
+(`NODE_EXTRA_CA_CERTS` is only needed when the proxy intercepts TLS.) The download is kept as `public/song/chart.sng`, so
+later runs skip it.
+
+Other scripts: `pnpm build`, `pnpm preview`, `pnpm typecheck`.
+
+## Controls
+
+- Keys **1** to **5** strum the five lanes, green to orange. You can also tap the lanes at the strike line.
+- The part menu (bottom right) picks the instrument and difficulty.
+- **Lyrics on/off** toggles the lyrics, which light up syllable by syllable.
+
+## How it works
+
+- **The chart is the media.** `src/chart-media.ts` is a custom media that the player drives like a `<video>`: it
+  plays the song's Web Audio stems and draws the highway on a canvas (`src/highway.ts`). `src/chart-media-view.tsx`
+  plugs it into the player.
+- **Parts are renditions.** Each instrument at each difficulty is one of the media's renditions, so the player's
+  quality menu becomes the part picker.
+- **Misses are an audio track.** A missed note selects the `missed` audio track, which mutes the part's stem until the
+  next hit selects `hit` again.
+- **The chart is text tracks.** The interesting files:
+  - [`src/tracks.ts`](src/tracks.ts) defines a typed text track per part of the chart, and turns a notes file into cues
+    that span each note's hit window and each sustain's tail.
+  - [`src/song-tracks.ts`](src/song-tracks.ts) adds those tracks to the player, swapping in the notes, Star Power, and
+    solos of whichever part is picked.
+  - [`src/use-cue-events.ts`](src/use-cue-events.ts) turns a track's active cues into `onEnter` and `onExit` calls.
+  - [`src/use-game.ts`](src/use-game.ts) is the game: a strum hits a note whose cue is active, a note cue that exits
+    unhit is a miss, holding through a sustain's cue earns a bonus, and solo cues show a banner.
+- `scripts/fetch-song.ts` downloads the Clone Hero chart, reads its MIDI, and writes the manifest, per-part notes, and
+  cue files the page loads from `/song/`.
+
+![Solo banner](docs/solo.jpg)
+
+![Ending chord](docs/ending-chord.jpg)
+
+![Results](docs/results.jpg)
+
+## Video.js version
+
+The timed metadata APIs are on Video.js `main` but not yet in an npm release. Until they ship, the `@videojs/*`
+dependencies are pinned to a [pkg.pr.new](https://pkg.pr.new) build of `main` at commit `da33ee1`.
+
+## Credits and licensing
+
+- **Music:** "Total Breakdown" by Brad Sucks, from
+  [Out Of It](https://freemusicarchive.org/music/Brad_Sucks/Out_Of_It/), licensed
+  [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
+- **Chart:** by MB1Nightmare and Greninjo. It is **not** redistributed in this repository: `pnpm song` downloads it
+  into the gitignored `public/song/`. Permission to redistribute it is pending.
+- Screenshots in `docs/` show the song and chart above.

@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+
+# Song data written by `pnpm song`. The chart has no license to redistribute.
+public/song/*
+!public/song/.gitignore

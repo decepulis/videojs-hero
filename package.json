@@ -1,0 +1,34 @@
+{
+  "name": "videojs-guitar-hero",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A tiny Guitar Hero in a Video.js player, built on timed metadata.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "song": "tsx scripts/fetch-song.ts"
+  },
+  "dependencies": {
+    "@videojs/media": "https://pkg.pr.new/videojs/video.js/@videojs/media@da33ee1",
+    "@videojs/react": "https://pkg.pr.new/videojs/video.js/@videojs/react@da33ee1",
+    "@videojs/utils": "https://pkg.pr.new/videojs/video.js/@videojs/utils@da33ee1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.8"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

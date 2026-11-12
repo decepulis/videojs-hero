@@ -1,0 +1,195 @@
+/* Layout: where everything sits. How it looks is in `theme.css`. */
+
+/* A small reset: the page draws all of its own UI. */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+h1,
+h2 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+ol {
+  list-style: none;
+}
+
+img,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* The player, centered on the page. */
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0.5rem;
+}
+
+.guitar-hero {
+  width: min(100%, 64rem);
+}
+
+.stage {
+  overflow: hidden;
+}
+
+/* Overlays line up with the highway the canvas draws: lanes 18% of the height wide, the strike line at 86%. */
+.screen {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  container-type: size;
+  user-select: none;
+}
+
+.highway {
+  position: absolute;
+  inset: 0;
+}
+
+.title-card,
+.results {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.results ol {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+}
+
+.results li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hud {
+  position: absolute;
+  top: 4cqh;
+  right: 3cqw;
+}
+
+.banner {
+  position: absolute;
+  top: 30%;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.lyrics {
+  position: absolute;
+  top: 3cqh;
+  left: 3cqw;
+  max-width: 52cqw;
+}
+
+/* Five tap zones from just above the strike line to the bottom edge, centered on the canvas's lanes. */
+.lanes {
+  position: absolute;
+  inset: 72% 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: min(90cqw, 90cqh);
+  margin-inline: auto;
+}
+
+.lane {
+  position: relative;
+  touch-action: none;
+}
+
+/* Centered on the lane's target. */
+.flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  translate: -50% -50%;
+}
+
+.control-bar {
+  display: flex;
+  align-items: center;
+}
+
+.time {
+  white-space: nowrap;
+}
+
+/* The progress bar: a fill per section, with solos and Star Power marked under it. */
+.progress {
+  position: relative;
+  flex: 1;
+  height: 1.5rem;
+}
+
+.sections,
+.section,
+.markers {
+  position: absolute;
+  inset: 0;
+}
+
+.section {
+  clip-path: inset(
+    0 calc(100% - var(--media-slider-chapter-end) + 1.5px) 0 calc(var(--media-slider-chapter-start) + 1.5px)
+  );
+}
+
+.track {
+  position: absolute;
+  inset-inline: 0;
+  top: 0.375rem;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.fill {
+  width: var(--media-slider-fill);
+  height: 100%;
+}
+
+.marker {
+  position: absolute;
+  bottom: 0.125rem;
+  left: var(--media-slider-marker-start);
+  width: var(--media-slider-marker-width);
+  height: 0.25rem;
+}
