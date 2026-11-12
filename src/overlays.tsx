@@ -23,7 +23,7 @@ export function TitleCard({ song }: { song: Song }) {
         {song.artist} · charted by {song.charter}
       </p>
       <PlayButton className="start" render={(props) => <button {...props}>Play</button>} />
-      <p className="hint">Strum with keys 1 to 5, tap the lanes, or plug in a guitar.</p>
+      <p className="hint">Play with A S D F G (or 1 to 5), tap the lanes, or plug in a guitar.</p>
     </div>
   );
 }

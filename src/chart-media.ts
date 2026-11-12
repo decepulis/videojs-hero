@@ -441,7 +441,7 @@ export class ChartMedia extends MediaTracksMixin(EventTarget) {
   }
 }
 
-/** The part to show first: Expert Guitar where the chart has it. */
+/** The part to show first: Easy Guitar where the chart has it, so a first try on a keyboard is fun. */
 function defaultPart(song: Song): Part {
-  return song.parts.find((part) => part.instrument === 'guitar' && part.difficulty === 'expert') ?? song.parts[0]!;
+  return song.parts.find((part) => part.instrument === 'guitar' && part.difficulty === 'easy') ?? song.parts[0]!;
 }

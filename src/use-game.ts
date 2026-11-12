@@ -9,7 +9,7 @@ import { useCueEvents } from './use-cue-events';
 import { useGuitar } from './use-guitar';
 import { useLaneKeys } from './use-lane-keys';
 
-/** Play along: strum a lane as its note's cue passes the strike line, with keys 1 to 5, the tap zones, or a guitar. */
+/** Play along: strum a lane as its note's cue passes the strike line, with the keyboard, the tap zones, or a guitar. */
 export function useGame(clock: { readonly currentTime: number }) {
   const store = usePlayer();
   const notes = useTextCues(notesTrack);

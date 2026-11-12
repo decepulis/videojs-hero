@@ -3,7 +3,7 @@ import { defineTextTrack, type TextCueFormat } from '@videojs/react';
 import type { Note } from './song';
 
 /** How early or late, in seconds, a strum still hits a note. */
-export const HIT_WINDOW = 0.08;
+export const HIT_WINDOW = 0.1;
 
 /** A sung line's syllables, to light up as they're sung. */
 export interface Lyric {

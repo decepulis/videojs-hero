@@ -3,8 +3,16 @@ import { useEffect, useEffectEvent } from 'react';
 
 import type { Lane } from './song';
 
-/** Keys 1 to 5 play the five lanes, green to orange. Read by position, so any layout, and Shift, work the same. */
+/**
+ * A S D F G (the home row, easiest for chords) or 1 to 5 play the five lanes, green to orange. Read by position, so any
+ * layout, and Shift, work the same.
+ */
 const LANE_KEYS = new Map<string, Lane>([
+  ['KeyA', 0],
+  ['KeyS', 1],
+  ['KeyD', 2],
+  ['KeyF', 3],
+  ['KeyG', 4],
   ['Digit1', 0],
   ['Digit2', 1],
   ['Digit3', 2],
