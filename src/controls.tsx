@@ -19,7 +19,12 @@ export function ControlBar({ song }: { song: Song }) {
       <PartMenu song={song} />
       <CaptionsButton
         className="control"
-        render={(props, state) => <button {...props}>{state.subtitlesShowing ? 'Lyrics on' : 'Lyrics off'}</button>}
+        label="Lyrics"
+        render={(props, state) => (
+          <button {...props} aria-pressed={state.subtitlesShowing}>
+            {state.subtitlesShowing ? 'Lyrics on' : 'Lyrics off'}
+          </button>
+        )}
       />
     </div>
   );
@@ -61,6 +66,7 @@ function PartMenu({ song }: { song: Song }) {
     <Menu.Root side="top" align="end">
       <QualityRadioGroup.Root formatRendition={(rendition) => label(rendition.id)}>
         <Menu.Trigger className="control" render={<button type="button" />}>
+          <span className="visually-hidden">Part: </span>
           <QualityRadioGroup.Value />
         </Menu.Trigger>
         <Menu.Popup className="menu">
