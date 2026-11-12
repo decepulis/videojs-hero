@@ -18,6 +18,11 @@ const media = new ChartMedia();
 
 media.src = SONG_URL;
 
+// A hidden tab stops drawing frames but not the audio, so the song pauses with it.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) media.pause();
+});
+
 function App() {
   const { song, part, run } = useChart(media);
 
