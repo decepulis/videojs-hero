@@ -1,7 +1,7 @@
 import './styles.css';
 import './theme.css';
 import { Container } from '@videojs/react';
-import { VideoPlayer } from '@videojs/react/video';
+import { usePlayer, VideoPlayer } from '@videojs/react/video';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -46,7 +46,13 @@ function App() {
 }
 
 function Game({ clock }: { clock: ChartMedia }) {
+  const store = usePlayer();
   const game = useGame(clock);
+
+  // Every game starts with the part's own stem playing, whatever the last one ended on.
+  useEffect(() => {
+    store.selectAudioTrack('hit');
+  }, [store]);
 
   return (
     <>
