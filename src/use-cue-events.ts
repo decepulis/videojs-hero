@@ -26,9 +26,14 @@ export function useCueEvents<Cue extends MediaTextCue>(track: TextTrackDefinitio
     // starts fresh rather than ending every cue of the old one.
     if (seeking || cues !== last.cues) return;
 
-    // Cues keep their identity while their track is unchanged, so comparing the two lists finds what changed.
-    for (const cue of last.active) if (!active.includes(cue)) exit(cue);
+    // While the track is unchanged, its cue list and the cues in it keep their identity, so comparing the active cues
+    // before and after finds the ones that ended and the ones that started.
+    for (const cue of last.active) {
+      if (!active.includes(cue)) exit(cue);
+    }
 
-    for (const cue of active) if (!last.active.includes(cue)) enter(cue);
+    for (const cue of active) {
+      if (!last.active.includes(cue)) enter(cue);
+    }
   }, [cues, active, seeking]);
 }

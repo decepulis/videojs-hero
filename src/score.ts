@@ -9,7 +9,7 @@ export interface Score {
   combo: number;
   maxCombo: number;
   hits: ReadonlySet<NoteCue>;
-  /** What last happened on each lane, and when, which keys its flash so each one replays. */
+  /** The last hit or miss on each lane, for its flash. `at` keys the flash, so a repeat on the same lane replays it. */
   flashes: Partial<Record<Lane, { kind: 'hit' | 'miss'; at: number }>>;
   banner: { text: string; at: number } | null;
 }
@@ -20,9 +20,9 @@ export type ScoreEvent =
   | { type: 'sustain'; length: number }
   | { type: 'banner'; text: string; at: number };
 
-export const NEW_SCORE: Score = { score: 0, combo: 0, maxCombo: 0, hits: new Set(), flashes: {}, banner: null };
+export const INITIAL_SCORE: Score = { score: 0, combo: 0, maxCombo: 0, hits: new Set(), flashes: {}, banner: null };
 
-export function score(state: Score, event: ScoreEvent): Score {
+export function scoreReducer(state: Score, event: ScoreEvent): Score {
   switch (event.type) {
     case 'hit': {
       const combo = state.combo + 1;

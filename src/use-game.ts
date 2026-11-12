@@ -2,7 +2,7 @@ import { useActiveTextCues, useTextCues } from '@videojs/react';
 import { usePlayer } from '@videojs/react/video';
 import { useReducer, useRef } from 'react';
 
-import { accuracy, multiplier, NEW_SCORE, score } from './score';
+import { accuracy, INITIAL_SCORE, multiplier, scoreReducer } from './score';
 import type { Lane } from './song';
 import { notesTrack, solosTrack, starPowerTrack, sustainsTrack } from './tracks';
 import { useCueEvents } from './use-cue-events';
@@ -13,15 +13,15 @@ export function useGame(clock: { readonly currentTime: number }) {
   const store = usePlayer();
   const notes = useTextCues(notesTrack);
   const starPower = useActiveTextCues(starPowerTrack).length > 0;
-  const [state, dispatch] = useReducer(score, NEW_SCORE);
+  const [state, dispatch] = useReducer(scoreReducer, INITIAL_SCORE);
   const held = useRef(new Set<Lane>());
 
   function press(lane: Lane) {
-    // Judge on the media's clock at the moment of the keypress. Active cues only move with time updates, and a strum
-    // can land between two of them.
+    // Active cues change only on `timeupdate`, but a strum can land between two of them, so judge it against the
+    // media's clock right now.
     const time = clock.currentTime;
     const cue = notes.find(
-      (note) => note.value?.lane === lane && !state.hits.has(note) && note.startTime <= time && time < note.endTime
+      (cue) => cue.value?.lane === lane && !state.hits.has(cue) && cue.startTime <= time && time < cue.endTime
     );
 
     // A strum with no note to hit breaks the combo.
