@@ -65,8 +65,9 @@ button {
   padding: 0.5rem;
 }
 
+/* As wide as fits, and in a landscape phone, short enough to keep the strike line and controls on screen. */
 .guitar-hero {
-  width: min(100%, 64rem);
+  width: min(100%, 64rem, (100svh - 5rem) * 16 / 9);
 }
 
 .stage {
@@ -154,19 +155,29 @@ button {
   translate: -50% -50%;
 }
 
+/* On a narrow screen, the part and lyrics buttons wrap onto a second row rather than squeeze the progress bar. */
 .control-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .time {
   white-space: nowrap;
 }
 
+/* A landscape phone only has the height for one row of controls, so the progress bar alone tells the time. */
+@media (max-height: 30rem) {
+  .time {
+    display: none;
+  }
+}
+
 /* The progress bar: a fill per section, with solos and Star Power marked under it. */
 .progress {
   position: relative;
-  flex: 1;
+  flex: 1 1 8rem;
   height: 1.5rem;
 }
 
