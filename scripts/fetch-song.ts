@@ -242,6 +242,7 @@ function emptyTrack(name: string): MidiTrack {
 
 function parseTrack(reader: ByteReader): MidiTrack {
   const track = emptyTrack('');
+  /** When each sounding note started, by channel and pitch. */
   const noteStarts = new Map<number, number>();
   let tick = 0;
   let runningStatus = 0;
@@ -269,6 +270,8 @@ function parseTrack(reader: ByteReader): MidiTrack {
     // A data byte where a status belongs repeats the last channel event's status. Some charts carry it across meta and
     // SysEx events, so it is never reset.
     if (status < 0x80) {
+      if (!runningStatus) throw new Error('Data byte with no status to repeat');
+
       reader.offset--;
       status = runningStatus;
     } else {
@@ -277,14 +280,16 @@ function parseTrack(reader: ByteReader): MidiTrack {
 
     const kind = status & 0xf0;
     const [note = 0, velocity = 0] = reader.take(kind === 0xc0 || kind === 0xd0 ? 1 : 2);
-    const start = noteStarts.get(note);
+    const key = ((status & 0x0f) << 8) | note;
+    const start = noteStarts.get(key);
 
-    if (kind === 0x90 && velocity > 0) {
-      noteStarts.set(note, tick);
-    } else if ((kind === 0x80 || kind === 0x90) && start !== undefined) {
+    // A note ends at its note-off, or where the same note starts again before one.
+    if ((kind === 0x80 || kind === 0x90) && start !== undefined) {
       track.notes.push({ note, tick: start, endTick: tick });
-      noteStarts.delete(note);
+      noteStarts.delete(key);
     }
+
+    if (kind === 0x90 && velocity > 0) noteStarts.set(key, tick);
   }
 
   track.notes.sort((a, b) => a.tick - b.tick || a.note - b.note);
