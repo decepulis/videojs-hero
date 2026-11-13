@@ -12,9 +12,9 @@
     "song": "tsx scripts/fetch-song.ts"
   },
   "dependencies": {
-    "@videojs/media": "https://pkg.pr.new/videojs/video.js/@videojs/media@da33ee1",
-    "@videojs/react": "https://pkg.pr.new/videojs/video.js/@videojs/react@da33ee1",
-    "@videojs/utils": "https://pkg.pr.new/videojs/video.js/@videojs/utils@da33ee1",
+    "@videojs/media": "^10.4.0",
+    "@videojs/react": "^10.4.0",
+    "@videojs/utils": "^10.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

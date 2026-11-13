@@ -2,7 +2,8 @@
 
 Play it at [videojs-hero.vercel.app](https://videojs-hero.vercel.app).
 
-A tiny Guitar Hero inside a [Video.js](https://videojs.org) React player, built on its timed metadata APIs. It's the
+A tiny Guitar Hero inside a [Video.js](https://videojs.org) React player, built on the timed metadata APIs new in
+Video.js 10.4. It's the
 example app for a blog post about timed metadata: the game reads every note, sustain, Star Power phrase, solo, section,
 and lyric as text track cues, and is mostly a few hooks that react to cues entering and leaving. (The highway itself is
 drawn from the media's own copy of the notes.)
@@ -86,11 +87,6 @@ What we bumped into in Video.js along the way is in [`docs/findings.md`](docs/fi
 ![Ending chord](docs/ending-chord.jpg)
 
 ![Results](docs/results.jpg)
-
-## Video.js version
-
-The timed metadata APIs are on Video.js `main` but not yet in an npm release. Until they ship, the `@videojs/*`
-dependencies are pinned to a [pkg.pr.new](https://pkg.pr.new) build of `main` at commit `da33ee1`.
 
 ## Credits and licensing
 
